@@ -63,6 +63,8 @@ def transform(y, sr=16000, mel=False):
 
         elif trans_var == 3:  # Time Masking
             S_dB = MelSpec(y, sr)
+            if S_dB.dim() == 2:
+                S_dB = S_dB.unsqueeze(0)
             S = time_mask(S_dB)
             cls = 3
             return S, cls
