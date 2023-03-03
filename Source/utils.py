@@ -1,34 +1,33 @@
-import numpy as np
-import torch
-import torchaudio
-from torch import nn
-from torch.nn import functional as F
-from torch import Tensor
-from typing import Type, Any, Callable, Union, List, Optional
 import os
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader, ConcatDataset
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import scipy.signal as signal
+from typing import Any, Callable, List, Optional, Type, Union
+
 import librosa
 import librosa.display
-from scipy.io import wavfile
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy
+import scipy.signal as signal
+import seaborn as sns
+import torch
+import torchaudio
 from IPython.display import Audio
 from pytorch_metric_learning import losses
-from Transform.MelSpec import MelSpec
+from scipy.io import wavfile
+from torch import Tensor, nn
+from torch.nn import functional as F
+from torch.utils.data import ConcatDataset, DataLoader, Dataset
+
+# from Dataset.data_loader import audiodir, MIMII
+from Dataset.data_loader import MIMII, audiodir
 from Transform.AWGN import AWGN
 from Transform.fade import fade
 from Transform.freq_mask import freq_mask
+from Transform.MelSpec import MelSpec
 from Transform.pitch_shift import pitch_shift
 from Transform.time_mask import time_mask
 from Transform.time_shift import time_shift
 from Transform.time_stretch import time_stretch
-# from Dataset.data_loader import audiodir, MIMII
-from Dataset.data_loader import audiodir, MIMII
-
-import scipy
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -83,17 +82,18 @@ def transform(y, sr=16000, mel=False):
         S_dB = MelSpec(y, sr)
         return S_dB, cls
 
+
 def apply_transform(train_features, train_labels, state=0):
     if state == 0:  # Training
-        #batch_size = train_features.size()[0]
-        #batch_size = 128
+        # batch_size = train_features.size()[0]
+        # batch_size = 128
         batch_size = 2
         Train = torch.zeros((2 * batch_size, 1, 128, 313))
         Label_cls = torch.zeros(2 * batch_size)
 
-        #for i in range(0, train_features.size()[0]):
+        # for i in range(0, train_features.size()[0]):
         for i in range(0, batch_size):
-            #y = train_features[i]
+            # y = train_features[i]
             y = train_features
             S1, cls1 = transform(y)
             Train[i, 0, :, :] = S1
@@ -105,7 +105,7 @@ def apply_transform(train_features, train_labels, state=0):
         # Label = torch.cat((train_labels,train_labels),0)
         Label = Label_cls
     else:  # Test
-        batch_size = train_features.size()[0]
+        batch_size = train_features.size(0)
         Train = torch.zeros((batch_size, 1, 128, 313))
         for i in range(0, train_features.size()[0]):
             y = train_features[i]
