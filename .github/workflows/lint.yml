@@ -1,27 +1,27 @@
----
-name: Lint python cod
-on:
-  push:
-    branches:
-      - main
-  #release:
-  #  types: [published]
+name: Pylint
+
+on: [push]
 
 jobs:
-  test:
-    name: Run the tests
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Python 3
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.6
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install black
-          pip install flask
-          pip install isort
-      - name: Run tests
-        run: python app/tests.py
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+        pip install black
+        pip install flask
+        pip install isort
+    - name: Analysing the code with pylint
+      run: |
+        black --line-length 79 --check .
+        # pylint $(git ls-files '*.py')
