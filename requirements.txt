@@ -1,0 +1,7 @@
+scipy
+pandas
+matplotlib
+seaborn
+librosa
+ipython
+pytorch_metric_learning
