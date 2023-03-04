@@ -22,14 +22,10 @@ jobs:
         pip install flake8
         pip install isort
     - name: Lint the code with black
-      run: |
-        black --line-length 79 --check .
+      run: black --line-length 79 --check .
     - name: Lint the code with pylint
-    run: |
-        pylint $(git ls-files '*.py')
+    run: pylint $(git ls-files '*.py')
     - name: Lint the code with isort
-      run: |
-        isort --check-only .
+      run: isort --check-only .
     - name: Lint the code with flake
-      run: |
-        flake8 .  
+      run: flake8 .  
