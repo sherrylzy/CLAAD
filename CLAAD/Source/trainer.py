@@ -6,7 +6,6 @@ from Network.ResNet18 import resnet18
 from pytorch_metric_learning import losses
 from Source import utils
 
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 

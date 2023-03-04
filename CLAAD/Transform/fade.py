@@ -1,8 +1,6 @@
 import numpy as np
-
 import torch
 import torchaudio
-
 from Transform.MelSpec import MelSpec
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
