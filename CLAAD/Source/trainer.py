@@ -1,28 +1,11 @@
-import os
-from typing import Any, Callable, List, Optional, Type, Union
-
-import librosa
-import librosa.display
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import scipy
-import scipy.signal as signal
-import seaborn as sns
 import torch
-import torchaudio
-from IPython.display import Audio
-from pytorch_metric_learning import losses
-from scipy.io import wavfile
-from torch import Tensor, nn
-from torch.nn import functional as F
-from torch.utils.data import ConcatDataset, DataLoader, Dataset
-
 from Dataset.train_test import train_test
 from Network.LinearClassifier import LinCLS
 from Network.ProjectionHead import Projection
 from Network.ResNet18 import resnet18
+from pytorch_metric_learning import losses
 from Source import utils
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -38,7 +21,7 @@ def trainer(
     verbosity=0,  # epoch 200
     pre_train=False,
 ):
-    if pre_train == False:
+    if not pre_train:
         optimizer = torch.optim.Adam(
             [
                 {"params": f.parameters()},
@@ -52,7 +35,6 @@ def trainer(
 
         for epoch in range(num_epochs):
             epoch_loss = 0
-            cls_loss = 0
             num_batch = 0
             # for train_features, train_labels in Train:
             for data_dir, labels in Train.dataset:
@@ -62,8 +44,8 @@ def trainer(
                 X = X.to(device)
                 Y = Y.to(device)
                 Y_NTXent = torch.arange(X.shape[0])
-                Y_NTXent[int(X.shape[0] / 2) :] = Y_NTXent[
-                    0 : int(X.shape[0] / 2)
+                Y_NTXent[int(X.shape[0] / 2):] = Y_NTXent[
+                    0: int(X.shape[0] / 2)
                 ]
                 h = f(X)
                 z = g(h)
@@ -77,7 +59,6 @@ def trainer(
                 # cls_loss += CELoss(cls_pred, Y.long())
                 num_batch += 1
             if verbosity > 0:
-                # print("epoch : {}/{}, CLS loss = {:.6f}".format(epoch + 1, num_epochs, cls_loss/num_batch))
                 print(
                     "epoch : {}/{}, loss = {:.6f}".format(
                         epoch + 1, num_epochs, epoch_loss / num_batch

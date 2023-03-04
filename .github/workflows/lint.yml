@@ -19,9 +19,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install black
-        pip install flask
+        pip install flake8
         pip install isort
-    - name: Analysing the code with pylint
+    - name: Lint the code with black
       run: |
         black --line-length 79 --check .
-        # pylint $(git ls-files '*.py')
+    - name: Lint the code with pylint
+        pylint $(git ls-files '*.py')
+    - name: Lint the code with isort
+        isort --check-only .
+    - name: Lint the code with flake
+        flake8 .  

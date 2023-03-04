@@ -1,22 +1,7 @@
-import os
 from typing import Any, Callable, List, Optional, Type, Union
 
-import librosa
-import librosa.display
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import scipy
-import scipy.signal as signal
-import seaborn as sns
 import torch
-import torchaudio
-from IPython.display import Audio
-from pytorch_metric_learning import losses
-from scipy.io import wavfile
 from torch import Tensor, nn
-from torch.nn import functional as F
-from torch.utils.data import ConcatDataset, DataLoader, Dataset
 
 
 def conv3x3(
@@ -71,7 +56,8 @@ class BasicBlock(nn.Module):
             raise NotImplementedError(
                 "Dilation > 1 not supported in BasicBlock"
             )
-        # Both self.conv1 and self.downsample layers downsample the input when stride != 1
+        # Both self.conv1 and self.downsample layers
+        # downsample the input when stride != 1
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = norm_layer(planes)
         self.relu = nn.ReLU(inplace=True)
@@ -100,10 +86,14 @@ class BasicBlock(nn.Module):
 
 
 class Bottleneck(nn.Module):
-    # Bottleneck in torchvision places the stride for downsampling at 3x3 convolution(self.conv2)
-    # while original implementation places the stride at the first 1x1 convolution(self.conv1)
-    # according to "Deep residual learning for image recognition"https://arxiv.org/abs/1512.03385.
-    # This variant is also known as ResNet V1.5 and improves accuracy according to
+    # Bottleneck in torchvision places the stride
+    # for downsampling at 3x3 convolution(self.conv2)
+    # while original implementation places the stride
+    # at the first 1x1 convolution(self.conv1)
+    # according to "Deep residual learning for image recognition"
+    # https://arxiv.org/abs/1512.03385.
+    # This variant is also known as ResNet V1.5
+    # and improves accuracy according to
     # https://ngc.nvidia.com/catalog/model-scripts/nvidia:resnet_50_v1_5_for_pytorch.
 
     expansion: int = 4
@@ -123,7 +113,8 @@ class Bottleneck(nn.Module):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         width = int(planes * (base_width / 64.0)) * groups
-        # Both self.conv2 and self.downsample layers downsample the input when stride != 1
+        # Both self.conv2 and self.downsample layers
+        # downsample the input when stride != 1
         self.conv1 = conv1x1(inplanes, width)
         self.bn1 = norm_layer(width)
         self.conv2 = conv3x3(width, width, stride, groups, dilation)
@@ -230,14 +221,18 @@ class ResNet(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
         # Zero-initialize the last BN in each residual branch,
-        # so that the residual branch starts with zeros, and each residual block behaves like an identity.
-        # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
+        # so that the residual branch starts with zeros,
+        # and each residual block behaves like an identity.
+        # This improves the model by 0.2~0.3% according to:
+        #  https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
                 if isinstance(m, Bottleneck):
-                    nn.init.constant_(m.bn3.weight, 0)  # type: ignore[arg-type]
+                    # type: ignore[arg-type]
+                    nn.init.constant_(m.bn3.weight, 0)
                 elif isinstance(m, BasicBlock):
-                    nn.init.constant_(m.bn2.weight, 0)  # type: ignore[arg-type]
+                    # type: ignore[arg-type]
+                    nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(
         self,
@@ -328,11 +323,13 @@ def _resnet(
 def resnet18(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ResNet:
-    r"""ResNet-18 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    """ResNet-18 model from
+        "Deep Residual Learning for Image Recognition"
+        <https://arxiv.org/pdf/1512.03385.pdf>.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        progress (bool): If True,
+            displays a progress bar of the download to stderr
     """
     return _resnet(
         "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs
