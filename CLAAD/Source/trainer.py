@@ -44,8 +44,8 @@ def trainer(
                 X = X.to(device)
                 Y = Y.to(device)
                 Y_NTXent = torch.arange(X.shape[0])
-                Y_NTXent[int(X.shape[0] / 2):] = Y_NTXent[
-                    0: int(X.shape[0] / 2)
+                Y_NTXent[int(X.shape[0] / 2) :] = Y_NTXent[
+                    0 : int(X.shape[0] / 2)
                 ]
                 h = f(X)
                 z = g(h)
