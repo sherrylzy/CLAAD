@@ -3,6 +3,7 @@ import argparse
 import torch
 from omegaconf import OmegaConf
 from pytorch_metric_learning import losses
+from tqdm import tqdm
 
 from CLAAD.Dataset.train_test import train_test
 from CLAAD.Network.LinearClassifier import LinCLS
@@ -40,7 +41,7 @@ def trainer(
             epoch_loss = 0
             num_batch = 0
             # for train_features, train_labels in Train:
-            for data_dir, labels in Train.dataset:
+            for data_dir, labels in tqdm(Train.dataset):
                 # X, Y = utils.apply_transform(train_features, train_labels)
                 X, Y = utils.apply_transform(data_dir, labels)
                 optimizer.zero_grad()

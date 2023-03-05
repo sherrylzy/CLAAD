@@ -6,3 +6,4 @@ librosa
 ipython
 pytorch_metric_learning
 omegaconf
+tqdm
