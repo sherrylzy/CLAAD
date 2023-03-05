@@ -1,14 +1,15 @@
 import numpy as np
 import scipy
 import torch
-from Transform.AWGN import AWGN
-from Transform.fade import fade
-from Transform.freq_mask import freq_mask
-from Transform.MelSpec import MelSpec
-from Transform.pitch_shift import pitch_shift
-from Transform.time_mask import time_mask
-from Transform.time_shift import time_shift
-from Transform.time_stretch import time_stretch
+
+from CLAAD.Transform.AWGN import AWGN
+from CLAAD.Transform.fade import fade
+from CLAAD.Transform.freq_mask import freq_mask
+from CLAAD.Transform.MelSpec import MelSpec
+from CLAAD.Transform.pitch_shift import pitch_shift
+from CLAAD.Transform.time_mask import time_mask
+from CLAAD.Transform.time_shift import time_shift
+from CLAAD.Transform.time_stretch import time_stretch
 
 # from Dataset.data_loader import audiodir, MIMII
 

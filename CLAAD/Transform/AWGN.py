@@ -1,6 +1,7 @@
 import numpy as np
 import torch
-from Transform.MelSpec import MelSpec
+
+from CLAAD.Transform.MelSpec import MelSpec
 
 
 def AWGN(y, SNR_min=-6, SNR_max=6, sr=16000):

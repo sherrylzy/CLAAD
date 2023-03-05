@@ -1,10 +1,14 @@
+import argparse
+
 import torch
-from Dataset.train_test import train_test
-from Network.LinearClassifier import LinCLS
-from Network.ProjectionHead import Projection
-from Network.ResNet18 import resnet18
+from omegaconf import OmegaConf
 from pytorch_metric_learning import losses
-from Source import utils
+
+from CLAAD.Dataset.train_test import train_test
+from CLAAD.Network.LinearClassifier import LinCLS
+from CLAAD.Network.ProjectionHead import Projection
+from CLAAD.Network.ResNet18 import resnet18
+from CLAAD.Source import utils
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -69,5 +73,12 @@ def trainer(
 
 
 """testing trainer program"""
-Train, Test = train_test(train_size=0.75, device="valve", id=0)
+parser = argparse.ArgumentParser()
+parser.add_argument("--config", type=str, default="configs/example.yaml")
+args = parser.parse_args()
+conf = OmegaConf.load(args.config)
+
+Train, Test = train_test(
+    train_size=conf["train_size"], device=conf["machine"], id=0
+)
 trainer(Train)
