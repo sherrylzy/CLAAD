@@ -1,3 +1,4 @@
+pytorch-lightning
 scipy
 pandas
 matplotlib
@@ -6,4 +7,3 @@ librosa
 ipython
 pytorch_metric_learning
 omegaconf
-tqdm

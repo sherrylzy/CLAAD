@@ -80,8 +80,8 @@ def apply_transform(train_features, train_labels, state=0):
 
         # for i in range(0, train_features.size()[0]):
         for i in range(0, batch_size):
-            # y = train_features[i]
-            y = train_features
+            y = train_features[i]
+            # y = train_features
             S1, cls1 = transform(y)
             Train[i, 0, :, :] = S1
             Label_cls[i] = cls1
