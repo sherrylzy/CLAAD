@@ -28,6 +28,5 @@ module = Temp_Module(
     classifier=LinCLS(),
     lr=conf["lr"],
 )
-trainer = Trainer(accelerator="auto")
+trainer = Trainer(accelerator="auto", logger=False)
 trainer.fit(module, train_dl, test_dl)
-# trainer.fit(module, train_dl)
