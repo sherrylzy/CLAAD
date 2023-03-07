@@ -1,17 +1,13 @@
 import argparse
 
-import torch
 from omegaconf import OmegaConf
-from pytorch_metric_learning import losses
-from tqdm import tqdm
 from pytorch_lightning import Trainer, seed_everything
 
 from CLAAD.Dataset.train_test import train_test
+from CLAAD.module.temp import Temp_Module
 from CLAAD.Network.LinearClassifier import LinCLS
 from CLAAD.Network.ProjectionHead import Projection
 from CLAAD.Network.ResNet18 import resnet18
-from CLAAD.Source import utils
-from CLAAD.module.temp import Temp_Module
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="configs/example.yaml")

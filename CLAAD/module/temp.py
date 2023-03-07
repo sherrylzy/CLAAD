@@ -6,12 +6,7 @@ from CLAAD.Source import utils
 
 
 class Temp_Module(LightningModule):
-    def __init__(self,
-        f,
-        g,
-        classifier,
-        lr=00.02
-    ):
+    def __init__(self, f, g, classifier, lr=00.02):
         super().__init__()
         self.f = f
         self.g = g
@@ -36,11 +31,11 @@ class Temp_Module(LightningModule):
         data_dir, labels = batch
         X, Y = utils.apply_transform(data_dir, labels)
         Y_NTXent = torch.arange(X.shape[0])
-        Y_NTXent[int(X.shape[0] / 2) :] = Y_NTXent[
-            0 : int(X.shape[0] / 2)
-        ]
+        Y_NTXent[int(X.shape[0] / 2) :] = Y_NTXent[0 : int(X.shape[0] / 2)]
         h = self.f(X)
         z = self.g(h)
         cls_pred = self.classifier(h)
-        loss = self.ntx_loss(z, Y_NTXent) + 0.1 * self.ce_loss(cls_pred, Y.long())
+        loss = self.ntx_loss(z, Y_NTXent) + 0.1 * self.ce_loss(
+            cls_pred, Y.long()
+        )
         return loss
