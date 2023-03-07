@@ -8,7 +8,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def audiodir(
-    machine, id, Data="normal", base_dir="/home/qmpzzpmq/CLAAD/MIMII/"
+    machine, id, Data="normal", base_dir="/home/qmpzzpmq/data/MIMII/"
 ):
     # /content/drive/MyDrive/SADCL/Dataset/'
     """

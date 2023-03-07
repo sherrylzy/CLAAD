@@ -1,8 +1,8 @@
 import librosa
-import librosa.display
 import numpy as np
 import torch
-from Transform.MelSpec import MelSpec
+
+from CLAAD.Transform.MelSpec import MelSpec
 
 
 def time_stretch(y, R_min=0.5, R_max=2, sr=16000):

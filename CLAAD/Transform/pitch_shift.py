@@ -1,7 +1,8 @@
 import librosa
 import numpy as np
 import torch
-from Transform.MelSpec import MelSpec
+
+from CLAAD.Transform.MelSpec import MelSpec
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

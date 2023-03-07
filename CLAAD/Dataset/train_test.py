@@ -1,11 +1,12 @@
 import torch
-from Dataset.data_loader import MIMII, audiodir
 from torch.utils.data import ConcatDataset
+
+from CLAAD.Dataset.data_loader import MIMII, audiodir
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def train_test(train_size, device="valve", id=0):
+def train_test(train_size, device="fan", id=0):
     train_size = 0.75
     dir, label = audiodir(device, id)
     dir_abnormal, label_abnormal = audiodir(device, id, Data="abnormal")
@@ -45,4 +46,4 @@ def train_test(train_size, device="valve", id=0):
     return Train, Test
 
 
-Train, Test = train_test(train_size=0.75, device="valve", id=0)
+Train, Test = train_test(train_size=0.75, device="fan", id=0)
