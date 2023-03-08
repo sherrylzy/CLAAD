@@ -1,6 +1,10 @@
 import numpy as np
 import scipy
 import torch
+import pandas as pd
+import sys
+import yaml
+import argparse
 
 from CLAAD.Transform.AWGN import AWGN
 from CLAAD.Transform.fade import fade
@@ -11,10 +15,17 @@ from CLAAD.Transform.time_mask import time_mask
 from CLAAD.Transform.time_shift import time_shift
 from CLAAD.Transform.time_stretch import time_stretch
 
+from sklearn import metrics
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import StandardScaler
+
+
+
 # from Dataset.data_loader import audiodir, MIMII
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 
 def transform(y, sr=16000, mel=False):
@@ -103,3 +114,42 @@ def apply_transform(train_features, train_labels, state=0):
 
 def anomaly_score(z, v_mean, v_cov):
     return scipy.spatial.distance.mahalanobis(z, v_mean, v_cov)
+
+# normalize data
+def scaling(X_train, X_test, X_val=None):
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+    X_val = scaler.transform(X_val)
+
+    return X_train, X_test, X_val
+
+
+#y_test_pred: the prediction on the test data, outlier labels (0 or 1)
+#y_test: test data
+def metric (y_test, y_test_pred):
+    accuracy = metrics.accuracy_score(y_test, y_test_pred)
+    precision = metrics.precision_score(y_test, y_test_pred)
+    recall = metrics.recall_score(y_test, y_test_pred)
+    f1_score = metrics.f1_score(y_test, y_test_pred)
+    auc = metrics.roc_auc_score(y_test, y_test_pred)
+    p_auc = metrics.roc_auc_score(y_test, y_test_pred, max_fpr=0.1)
+    performance = []
+    performance.append([auc, p_auc, precision, recall, f1_score])
+
+    scores = pd.DataFrame(
+        [
+            {
+                "Accuracy": accuracy,
+                "Precision": precision,
+                "Recall": recall,
+                "F1_score": f1_score,
+                "AUC": auc,
+                "pAUC": p_auc
+            }
+        ]
+    )
+    amean_performance = amean_performance = np.mean(np.array(performance, dtype=float), axis=0)
+    hmean_performance = scipy.stats.hmean(
+        np.maximum(np.array(performance, dtype=float), sys.float_info.epsilon), axis=0)
+    return scores, performance, amean_performance, hmean_performance
