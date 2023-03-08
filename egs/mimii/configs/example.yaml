@@ -1,3 +1,10 @@
-machine: "fan"
-train_size: 0.75
-lr: 0.002
+dataset:
+  path: "/home/qmpzzpmq/data/MIMII/fan/id_00"
+  normal_ratio_in_test: 0.75
+dataloader:
+  batch_size: 2
+  shuffle: true
+  num_workers: 4
+  drop_last: true
+opt:
+  lr: 0.002
