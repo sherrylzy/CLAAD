@@ -6,14 +6,22 @@ from CLAAD.Source import utils
 
 
 class Temp_Module(LightningModule):
-    def __init__(self, f, g, classifier, lr=00.02):
+    def __init__(self,
+        f,
+        g,
+        classifier, 
+        opt_config={
+            "lr":00.02,
+
+        }
+    ):
         super().__init__()
         self.f = f
         self.g = g
         self.classifier = classifier
         self.ce_loss = torch.nn.CrossEntropyLoss()
         self.ntx_loss = losses.NTXentLoss()
-        self.lr = lr
+        self.opt_config = opt_config
 
     def configure_optimizers(self):
         return torch.optim.Adam(
@@ -24,7 +32,7 @@ class Temp_Module(LightningModule):
                     "params": self.classifier.parameters(),
                 },
             ],
-            lr=self.lr,
+            **self.opt_config,
         )
 
     def training_step(self, batch, batch_idx):

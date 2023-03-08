@@ -5,14 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "train",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "../../CLAAD/bin/train.py",
             "console": "integratedTerminal",
-            "justMyCode": false,
+            "justMyCode": true,
+            "args": [
+                "--config", "configs/example.yaml"
+            ],
             "env": {
-                "PYTHONPATH": "./CLAAD:${PYTHONPATH}"
+                "PYTHONPATH": "../..:${PYTHONPATH}"
             }
         }
     ]
