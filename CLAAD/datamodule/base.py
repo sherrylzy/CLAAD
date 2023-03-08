@@ -1,14 +1,16 @@
 from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader
 
+
 class Audio_DataModule(LightningDataModule):
-    def __init__(self, 
+    def __init__(
+        self,
         train_dataset,
         val_dataset,
         dataloader_conf={
-            "batch_size":2,
+            "batch_size": 2,
             "shuffle": True,
-            "num_workers":4,
+            "num_workers": 4,
             "drop_last": True,
         },
     ):

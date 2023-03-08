@@ -6,14 +6,14 @@ from CLAAD.Source import utils
 
 
 class Temp_Module(LightningModule):
-    def __init__(self,
+    def __init__(
+        self,
         f,
         g,
-        classifier, 
+        classifier,
         opt_config={
-            "lr":00.02,
-
-        }
+            "lr": 00.02,
+        },
     ):
         super().__init__()
         self.f = f

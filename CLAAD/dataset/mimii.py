@@ -1,19 +1,22 @@
 from glob import glob
+
 import torch
 import torchaudio
-from torch.utils.data import Dataset, ConcatDataset
+from torch.utils.data import ConcatDataset, Dataset
+
 
 def mimii_file_list_generator(
-        path,
-        prefix_normal="normal",
-        prefix_anormal="abnormal",
-        ext="wav",
-    ):
+    path,
+    prefix_normal="normal",
+    prefix_anormal="abnormal",
+    ext="wav",
+):
     files_list = []
     for prefix in [prefix_normal, prefix_anormal]:
         glob_str = f"{path}/{prefix}/*.{ext}"
         files_list.append(glob(glob_str))
     return files_list
+
 
 class Mimii_Dataset(Dataset):
     def __init__(self, data_dir, labels):
@@ -29,6 +32,7 @@ class Mimii_Dataset(Dataset):
         x = x.mean(axis=0)
         y = self.labels[idx]
         return x, y
+
 
 def mimii_dataset_builder(path, normal_ratio_in_test=0.75):
     normal_files, abnormal_files = mimii_file_list_generator(path)
