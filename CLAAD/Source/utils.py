@@ -159,7 +159,7 @@ def metric(y_test, y_test_pred):
             }
         ]
     )
-    amean_performance = amean_performance = np.mean(np.array(performance, dtype=float), axis=0)
+    amean_performance = np.mean(np.array(performance, dtype=float), axis=0)
     hmean_performance = scipy.stats.hmean(
         np.maximum(np.array(performance, dtype=float), sys.float_info.epsilon), axis=0)
     return scores, performance, amean_performance, hmean_performance
